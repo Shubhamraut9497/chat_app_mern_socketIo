@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Sofia&family=Work+Sans:wght@300&display=swap');
+
+.App{
+    height:100vh;
+    display:flex;
+    background-image: url("./background2.jpg");
+    background-size: cover;
+    background-position: bottom;
+    color:black;
+}
+/* Webkit Scrollbar */
+::-webkit-scrollbar {
+  width: 0px; /* Set the scrollbar width to 0px */
+}
+
+/* Webkit Scrollbar Thumb */
+::-webkit-scrollbar-thumb {
+  background: rgba(136,136,136,0.281); /* Set the background color for the scrollbar thumb */
+}
+
+/* Webkit Scrollbar Thumb on Hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Set the background color for the scrollbar thumb on hover */
+}
