@@ -19,7 +19,7 @@ const server = createServer(app);
 const io = new Server(server, {
     pingTimeout: 60000,
     cors: {
-        origin: "http://localhost:3000",
+        origin: "https://chat-app-mern-socket-io-ezti.vercel.app/",
         methods: ["GET", "POST"],
         credentials: true
     }
@@ -28,7 +28,7 @@ const io = new Server(server, {
 app.use(express.json());
 app.use(cors({ 
     credentials: true, 
-    origin: "http://localhost:3000" 
+    origin: "https://chat-app-mern-socket-io-ezti.vercel.app/" 
 }));
 
 // Routes for user authentication
