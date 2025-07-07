@@ -26,6 +26,7 @@ function ChatPage() {
           <ChatBox fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
         )}
       </Box>
+      
     </div>
   );
 }

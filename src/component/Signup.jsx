@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useState } from "react";
-import { useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 function Signup() {
   const [name, setName] = useState("");
@@ -24,16 +24,18 @@ function Signup() {
   const history = useHistory();
 
   const handleShow = () => setShow(!show);
+  
   const postDetails = (pic) => {
     setLoading(true);
     if (pic === undefined) {
       toast({
-        title: "Please Select and image",
+        title: "Please Select an image",
         status: "warning",
         duration: 5000,
         isClosable: true,
         position: "bottom",
       });
+      setLoading(false);
       return;
     }
     if (pic.type === "image/jpeg" || pic.type === "image/png") {
@@ -55,25 +57,20 @@ function Signup() {
         })
         .catch((err) => {
           console.log(err);
+          toast({
+            title: "Error uploading image",
+            description: "Please try again",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+            position: "bottom",
+          });
           setLoading(false);
         });
     } else {
       toast({
-        title: "Please Select and image",
-        status: "warning",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
-      return;
-    }
-  };
-
-  const handleSubmit = (e) => {
-    setLoading(true);
-    if (!name || !email || !password) {
-      toast({
-        title: "Please Submit all the fields",
+        title: "Please Select an image",
+        description: "Only JPEG and PNG files are allowed",
         status: "warning",
         duration: 5000,
         isClosable: true,
@@ -82,38 +79,62 @@ function Signup() {
       setLoading(false);
       return;
     }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    if (!name || !email || !password) {
+      toast({
+        title: "Please fill all the required fields",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+      return;
+    }
+
     try {
       const config = {
         headers: {
           "Content-type": "application/json",
         },
       };
-      const response  = axios.post(
+      
+      // Use await to properly handle the async response
+      const response = await axios.post(
         `${apiUrl}/api/user`,
         { name, email, password, picture },
         config
-      )
-         toast({
-           title: "Login Successful",
-           status: "success",
-           duration: 5000,
-           isClosable: true,
-           position: "bottom",
-         });
+      );
 
-         // Store the user info in localStorage
-         localStorage.setItem("userInfo", JSON.stringify(response));
-         setLoading(false);
-         history.push("/chats");
-    } catch (err) {
       toast({
-        title: "Error Occured",
-        description: err.response.data.message,
-        status: "warning",
+        title: "Registration Successful",
+        status: "success",
         duration: 5000,
         isClosable: true,
         position: "bottom",
       });
+
+      // Store the user info in localStorage
+      localStorage.setItem("userInfo", JSON.stringify(response.data));
+      setLoading(false);
+      history.push("/chats");
+      
+    } catch (err) {
+      console.error("Signup error:", err);
+      toast({
+        title: "Error Occurred",
+        description: err.response?.data?.message || "Something went wrong",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
     }
   };
 
@@ -123,6 +144,7 @@ function Signup() {
         <FormLabel>Name</FormLabel>
         <Input
           placeholder="Enter your name"
+          value={name}
           onChange={(e) => setName(e.target.value)}
         />
       </FormControl>
@@ -131,6 +153,7 @@ function Signup() {
         <Input
           type="email"
           placeholder="Enter your email"
+          value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
       </FormControl>
@@ -139,13 +162,14 @@ function Signup() {
         <InputGroup>
           <Input
             type={show ? "text" : "password"}
-            placeholder="password"
+            placeholder="Enter your password"
+            value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
           <InputRightElement width="4.5rem">
             {password && (
               <Button h="1.725rem" size="sm" onClick={handleShow}>
-                {show ? "hide" : "show"}
+                {show ? "Hide" : "Show"}
               </Button>
             )}
           </InputRightElement>
