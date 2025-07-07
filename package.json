@@ -2,7 +2,7 @@
   "name": "chat_application_mern",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://127.0.0.1:4500",
+  "proxy": "https://chat-app-mern-socketio-4dln.onrender.com/",
   "dependencies": {
     "@chakra-ui/icon": "^3.2.0",
     "@chakra-ui/icons": "^2.1.1",
